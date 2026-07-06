@@ -1,0 +1,994 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rankrit Dojo — Membership Registration</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --red: #B91C1C;
+    --red-dark: #991515;
+    --red-light: #FEF2F2;
+    --gold: #C9A227;
+    --gold-light: #FDF8EC;
+    --black: #0D0D0D;
+    --ink: #1C1C1C;
+    --grey: #6B7280;
+    --lightgrey: #F3F4F6;
+    --border: #E5E7EB;
+    --white: #FFFFFF;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: #F7F7F7;
+    color: var(--ink);
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ── */
+  .site-header {
+    background: var(--black);
+    padding: 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    border-bottom: 3px solid var(--gold);
+  }
+  .header-inner {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 14px 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .logo-mark {
+    width: 40px;
+    height: 40px;
+    background: var(--red);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .logo-mark span {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    color: white;
+    letter-spacing: 1px;
+  }
+  .logo-text { line-height: 1.2; }
+  .logo-text .name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    letter-spacing: 2px;
+    color: var(--white);
+  }
+  .logo-text .tagline {
+    font-size: 10px;
+    color: var(--gold);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+
+  /* ── HERO BANNER ── */
+  .hero {
+    background: var(--black);
+    padding: 40px 24px 36px;
+    text-align: center;
+    border-bottom: 1px solid #222;
+  }
+  .hero h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(32px, 7vw, 52px);
+    letter-spacing: 3px;
+    color: var(--white);
+    line-height: 1;
+    margin-bottom: 10px;
+  }
+  .hero h1 span { color: var(--red); }
+  .hero p {
+    font-size: 13px;
+    color: #9CA3AF;
+    max-width: 500px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+  .step-pills {
+    display: flex;
+    justify-content: center;
+    gap: 0;
+    margin-top: 24px;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .pill {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #1A1A1A;
+    border: 1px solid #333;
+    border-radius: 20px;
+    padding: 6px 14px;
+    font-size: 12px;
+    color: #9CA3AF;
+    font-weight: 500;
+  }
+  .pill .num {
+    background: var(--red);
+    color: white;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .pill.active { border-color: var(--gold); color: var(--gold); }
+  .pill.active .num { background: var(--gold); color: var(--black); }
+
+  /* ── MAIN CONTAINER ── */
+  .container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 24px 16px 60px;
+  }
+
+  /* ── CARD ── */
+  .card {
+    background: var(--white);
+    border-radius: 12px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+    margin-bottom: 20px;
+    overflow: hidden;
+  }
+  .card-header {
+    background: var(--black);
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .card-header .icon {
+    width: 32px;
+    height: 32px;
+    background: var(--red);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  .card-header h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    letter-spacing: 2px;
+    color: var(--white);
+  }
+  .card-header .badge {
+    margin-left: auto;
+    background: var(--gold);
+    color: var(--black);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    padding: 3px 8px;
+    border-radius: 10px;
+    text-transform: uppercase;
+  }
+
+  /* ── T&C SCROLL BOX ── */
+  .tnc-box {
+    height: 340px;
+    overflow-y: auto;
+    padding: 24px;
+    background: #FAFAFA;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+    line-height: 1.75;
+    color: #374151;
+    scroll-behavior: smooth;
+  }
+  .tnc-box::-webkit-scrollbar { width: 6px; }
+  .tnc-box::-webkit-scrollbar-track { background: #F3F4F6; }
+  .tnc-box::-webkit-scrollbar-thumb { background: var(--red); border-radius: 3px; }
+
+  .tnc-section { margin-bottom: 20px; }
+  .tnc-section h3 {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--red);
+    margin-bottom: 8px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid #FECACA;
+  }
+  .tnc-section ol {
+    padding-left: 18px;
+  }
+  .tnc-section ol li {
+    margin-bottom: 6px;
+  }
+  .tnc-section p {
+    margin-bottom: 6px;
+  }
+
+  .scroll-hint {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 8px;
+    background: var(--gold-light);
+    border-bottom: 1px solid #F3E4A0;
+    font-size: 11.5px;
+    color: #92670A;
+    font-weight: 500;
+  }
+  .scroll-hint.done {
+    background: #F0FDF4;
+    border-color: #BBF7D0;
+    color: #166534;
+  }
+
+  /* ── AGREEMENT CHECKBOX ── */
+  .agree-section {
+    padding: 20px 24px;
+    border-top: 1px solid var(--border);
+  }
+  .checkbox-label {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    cursor: pointer;
+    user-select: none;
+  }
+  .checkbox-label input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    accent-color: var(--red);
+    flex-shrink: 0;
+    margin-top: 2px;
+    cursor: pointer;
+  }
+  .checkbox-label .check-text {
+    font-size: 13.5px;
+    font-weight: 500;
+    line-height: 1.5;
+    color: var(--ink);
+  }
+  .checkbox-label .check-text span {
+    color: var(--red);
+    font-weight: 700;
+  }
+
+  /* ── FORM FIELDS ── */
+  .form-body {
+    padding: 24px;
+  }
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  .form-grid .full { grid-column: 1 / -1; }
+
+  .field { display: flex; flex-direction: column; gap: 6px; }
+  .field label {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    color: var(--grey);
+    text-transform: uppercase;
+  }
+  .field label .req { color: var(--red); }
+  .field input,
+  .field select,
+  .field textarea {
+    padding: 11px 14px;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    color: var(--ink);
+    background: var(--white);
+    transition: border-color 0.2s, box-shadow 0.2s;
+    outline: none;
+    width: 100%;
+  }
+  .field input:focus,
+  .field select:focus,
+  .field textarea:focus {
+    border-color: var(--red);
+    box-shadow: 0 0 0 3px rgba(185, 28, 28, 0.08);
+  }
+  .field select { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236B7280' stroke-width='2'%3E%3Cpolyline points='6,9 12,15 18,9'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; padding-right: 36px; }
+  .field textarea { resize: vertical; min-height: 80px; }
+
+  /* ── MINOR SECTION ── */
+  .minor-toggle {
+    margin: 0 24px 0;
+    padding: 14px 18px;
+    background: var(--gold-light);
+    border: 1.5px solid #F3E4A0;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+  }
+  .minor-toggle input[type="checkbox"] {
+    width: 18px; height: 18px; accent-color: var(--gold); flex-shrink: 0;
+  }
+  .minor-toggle label { font-size: 13px; font-weight: 600; color: #92670A; cursor: pointer; }
+
+  .minor-fields {
+    display: none;
+    padding: 20px 24px 0;
+  }
+  .minor-fields.visible { display: block; }
+  .minor-banner {
+    background: var(--gold-light);
+    border-left: 4px solid var(--gold);
+    padding: 10px 14px;
+    border-radius: 0 6px 6px 0;
+    font-size: 12.5px;
+    color: #92670A;
+    font-weight: 500;
+    margin-bottom: 14px;
+  }
+
+  /* ── SUBMIT ── */
+  .submit-section {
+    padding: 20px 24px 24px;
+    border-top: 1px solid var(--border);
+  }
+  .submit-btn {
+    width: 100%;
+    padding: 15px;
+    background: var(--red);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+  .submit-btn:hover { background: var(--red-dark); }
+  .submit-btn:active { transform: scale(0.99); }
+  .submit-btn:disabled {
+    background: #D1D5DB;
+    cursor: not-allowed;
+    color: #9CA3AF;
+  }
+  .privacy-note {
+    text-align: center;
+    font-size: 11.5px;
+    color: var(--grey);
+    margin-top: 10px;
+    line-height: 1.5;
+  }
+  .privacy-note a { color: var(--red); }
+
+  /* ── SUCCESS STATE ── */
+  .success-card {
+    display: none;
+    background: var(--white);
+    border-radius: 12px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+    padding: 48px 24px;
+    text-align: center;
+  }
+  .success-card.visible { display: block; }
+  .success-icon {
+    width: 64px;
+    height: 64px;
+    background: #DCFCE7;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+    font-size: 30px;
+  }
+  .success-card h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    letter-spacing: 2px;
+    color: var(--black);
+    margin-bottom: 10px;
+  }
+  .success-card p {
+    font-size: 14px;
+    color: var(--grey);
+    max-width: 380px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+  .success-card .welcome {
+    margin-top: 24px;
+    background: var(--red-light);
+    border-left: 4px solid var(--red);
+    padding: 14px 18px;
+    border-radius: 0 8px 8px 0;
+    font-size: 13px;
+    color: var(--red-dark);
+    font-weight: 600;
+    text-align: left;
+  }
+
+  /* ── LOADER ── */
+  .spinner {
+    display: none;
+    width: 20px;
+    height: 20px;
+    border: 2px solid rgba(255,255,255,0.3);
+    border-top-color: white;
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ── ERROR ── */
+  .error-msg {
+    display: none;
+    background: #FEF2F2;
+    border: 1px solid #FECACA;
+    color: var(--red-dark);
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-size: 13px;
+    margin-top: 12px;
+    text-align: center;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 560px) {
+    .form-grid { grid-template-columns: 1fr; }
+    .form-grid .full { grid-column: 1; }
+    .hero h1 { font-size: 30px; }
+    .tnc-box { height: 280px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="site-header">
+  <div class="header-inner">
+    <div class="logo-mark"><span>RD</span></div>
+    <div class="logo-text">
+      <div class="name">Rankrit Dojo Fight Club</div>
+      <div class="tagline">Gurgaon · Combat Sports Academy</div>
+    </div>
+  </div>
+</header>
+
+<!-- HERO -->
+<div class="hero">
+  <h1>Membership <span>Registration</span></h1>
+  <p>Read the Terms & Conditions carefully, then fill in your details. Your digital signature confirms acceptance.</p>
+  <div class="step-pills">
+    <div class="pill active"><span class="num">1</span> Read T&C</div>
+    <div class="pill active"><span class="num">2</span> Agree & Sign</div>
+    <div class="pill active"><span class="num">3</span> Fill Details</div>
+    <div class="pill active"><span class="num">4</span> Submit</div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- MAIN FORM -->
+  <form id="regForm">
+    <input type="hidden" name="access_key" value="91aec322-7312-4e81-a615-7e6333b7cf22">
+    <input type="hidden" name="subject" value="New Membership Registration — Rankrit Dojo Fight Club">
+    <input type="hidden" name="from_name" value="Rankrit Dojo Registration Form">
+
+    <!-- STEP 1: T&C -->
+    <div class="card">
+      <div class="card-header">
+        <div class="icon">📋</div>
+        <h2>Terms & Conditions</h2>
+        <span class="badge">Read First</span>
+      </div>
+
+      <div class="scroll-hint" id="scrollHint">
+        ↓ Scroll through the full document before agreeing
+      </div>
+
+      <div class="tnc-box" id="tncBox">
+
+        <p style="font-size:12px;color:#6B7280;margin-bottom:16px;">
+          Please read carefully before registering as a member at Rankrit Dojo Fight Club ("the Academy"). By submitting this form, you confirm that you have read, understood, and agree to be bound by the following terms.
+        </p>
+
+        <div class="tnc-section">
+          <h3>1. Membership &amp; Enrollment</h3>
+          <ol>
+            <li>Membership is granted only after submission of a completed registration form, applicable fee payment, and (where required) a signed parent/guardian consent for minors.</li>
+            <li>Membership is personal and non-transferable. It cannot be sold, gifted, or shared.</li>
+            <li>The Academy reserves the right to verify the age, medical fitness, and identity of any member before or during enrollment.</li>
+            <li>Membership plans and their validity periods are as communicated at the time of enrollment and subject to change for future enrollments.</li>
+            <li>The Academy reserves the right to refuse or terminate membership to any individual whose conduct is deemed inappropriate, unsafe, or in violation of these terms.</li>
+          </ol>
+        </div>
+
+        <div class="tnc-section">
+          <h3>2. Fees &amp; Payments</h3>
+          <ol>
+            <li>All fees must be paid in advance for the membership period selected.</li>
+            <li>Fees once paid are strictly non-refundable, including in cases of voluntary discontinuation, personal reasons, relocation, injury, or dissatisfaction, except where required by law.</li>
+            <li>Membership will not be paused or pro-rated for missed classes, vacations, or personal absences, unless covered under the Freeze Policy.</li>
+            <li>Late payment of renewal fees may result in suspension of access until dues are cleared.</li>
+            <li>The Academy reserves the right to revise fee structures from time to time. Revised fees apply only at the time of renewal.</li>
+            <li>Cheque bounce, failed transactions, or payment disputes may attract additional charges.</li>
+          </ol>
+        </div>
+
+        <div class="tnc-section">
+          <h3>3. Membership Freeze / Hold Policy</h3>
+          <ol>
+            <li>A membership freeze may be requested in case of medical emergency, injury, or travel, subject to written/WhatsApp intimation in advance with supporting documents where applicable.</li>
+            <li>Freeze requests are granted solely at the discretion of Academy management and are not an automatic entitlement.</li>
+            <li>No freeze or refund will be granted for unreported or retroactive absence.</li>
+          </ol>
+        </div>
+
+        <div class="tnc-section">
+          <h3>4. Code of Conduct</h3>
+          <ol>
+            <li>Members must treat coaches, staff, and fellow members with respect and discipline at all times.</li>
+            <li>Bullying, harassment, discrimination, abusive language, or aggressive behavior outside supervised training will not be tolerated and may result in immediate termination without refund.</li>
+            <li>Unauthorized sparring or use of techniques without coach supervision is strictly prohibited.</li>
+            <li>Members must arrive on time and adhere to the etiquette standards of the discipline they are training in.</li>
+            <li>Members are expected to maintain personal hygiene and wear appropriate training attire at all times.</li>
+            <li>Consumption of alcohol, tobacco, or any intoxicating/banned substances on Academy premises is strictly prohibited.</li>
+            <li>Any damage to Academy property due to negligence or misconduct will be charged to the responsible member.</li>
+          </ol>
+        </div>
+
+        <div class="tnc-section">
+          <h3>5. Health, Fitness &amp; Medical Disclosure</h3>
+          <ol>
+            <li>The Member confirms they are physically fit and medically capable of participating in strenuous physical activity, combat sports training, and sparring.</li>
+            <li>The Member must disclose any pre-existing medical conditions, injuries, surgeries, cardiac issues, asthma, fractures, allergies, pregnancy, or any condition that may affect safe training, prior to enrollment.</li>
+            <li>It is the Member's sole responsibility to consult a physician before beginning training and to keep the Academy informed of any change in medical condition.</li>
+            <li>The Academy and its coaches are not medical professionals and do not provide medical advice.</li>
+          </ol>
+        </div>
+
+        <div class="tnc-section">
+          <h3>6. Assumption of Risk, Injury &amp; Liability Waiver</h3>
+          <ol>
+            <li>Combat sports including MMA, Boxing, Wrestling, Kickboxing, and Jiu-Jitsu inherently involve physical contact and a risk of injury.</li>
+            <li>The Member voluntarily participates with full knowledge that activities carry an inherent risk of physical injury, including bruises, sprains, fractures, dislocations, cuts, concussions, and in rare cases, serious or permanent injury.</li>
+            <li>The Member assumes full responsibility for any injury, disability, death, or loss of property that may occur while on Academy premises or during any Academy-related activity.</li>
+            <li>The Academy, its owners, coaches, staff, and affiliates shall not be held liable for any injury, medical condition, loss, theft, or damage suffered by the Member, to the maximum extent permitted by law.</li>
+            <li>The Member agrees to immediately inform the coach of any pain, discomfort, dizziness, or injury during a session.</li>
+            <li>In the event of a medical emergency, the Academy may arrange first-aid and/or transport to the nearest hospital; all resulting medical costs will be borne by the Member/their guardian.</li>
+          </ol>
+        </div>
+
+        <div class="tnc-section">
+          <h3>7. Members Under 18 Years of Age</h3>
+          <ol>
+            <li>Enrollment of minors requires this form to be completed and submitted by a parent or legal guardian, who accepts full responsibility on the minor's behalf.</li>
+            <li>Parents/guardians are responsible for drop-off and pick-up of minors, and for informing the Academy of any allergy, medical condition, or behavioral concern.</li>
+          </ol>
+        </div>
+
+        <div class="tnc-section">
+          <h3>8. Class Schedule &amp; Attendance</h3>
+          <ol>
+            <li>Class timings, batch allocations, and schedules are determined by the Academy and may be revised with prior notice.</li>
+            <li>The Academy may occasionally cancel, reschedule, or merge a class due to coach unavailability, public holidays, or unforeseen circumstances.</li>
+            <li>Make-up classes for missed sessions are offered solely at the discretion of management and are not a contractual right.</li>
+          </ol>
+        </div>
+
+        <div class="tnc-section">
+          <h3>9. Facility Use &amp; Personal Belongings</h3>
+          <ol>
+            <li>The Academy is not responsible for loss, theft, or damage to personal belongings brought onto the premises. Members are advised to avoid bringing valuables.</li>
+            <li>Parking, where available, is used at the member's own risk.</li>
+          </ol>
+        </div>
+
+        <div class="tnc-section">
+          <h3>10. Photography, Video &amp; Social Media</h3>
+          <ol>
+            <li>By enrolling, the Member consents to being photographed/filmed during classes, events, and competitions for training analysis and promotional use (including Instagram), unless the Member submits a written request to opt out.</li>
+          </ol>
+        </div>
+
+        <div class="tnc-section">
+          <h3>11. Suspension &amp; Termination</h3>
+          <ol>
+            <li>The Academy reserves the right to suspend or terminate a membership without refund in cases of repeated indiscipline, non-payment of dues, violent or unsafe conduct, or breach of these terms.</li>
+          </ol>
+        </div>
+
+        <div class="tnc-section">
+          <h3>12. Force Majeure</h3>
+          <p>The Academy shall not be held responsible for any failure or delay in providing services due to circumstances beyond its reasonable control, including natural disasters, pandemics, government orders/lockdowns, power outages, or other force majeure events.</p>
+        </div>
+
+        <div class="tnc-section">
+          <h3>13. Governing Law &amp; Jurisdiction</h3>
+          <p>These Terms & Conditions shall be governed by the laws of India. Any disputes shall be subject to the exclusive jurisdiction of the courts at Gurugram, Haryana.</p>
+        </div>
+
+      </div><!-- end tnc-box -->
+
+      <!-- AGREE CHECKBOX -->
+      <div class="agree-section">
+        <label class="checkbox-label">
+          <input type="checkbox" id="agreeCheck" name="tnc_agreed" value="Yes — Member has read and agreed to all Terms & Conditions" required>
+          <span class="check-text">
+            I have read the complete Terms &amp; Conditions above and <span>voluntarily agree</span> to all clauses, including the liability waiver and assumption of risk for combat sports training.
+          </span>
+        </label>
+      </div>
+    </div>
+    <!-- END T&C CARD -->
+
+    <!-- STEP 2: MEMBER DETAILS -->
+    <div class="card">
+      <div class="card-header">
+        <div class="icon">👤</div>
+        <h2>Member Details</h2>
+      </div>
+      <div class="form-body">
+        <div class="form-grid">
+
+          <div class="field full">
+            <label>Full Name <span class="req">*</span></label>
+            <input type="text" name="full_name" placeholder="e.g. Rahul Sharma" required>
+          </div>
+
+          <div class="field">
+            <label>Date of Birth <span class="req">*</span></label>
+            <input type="date" name="date_of_birth" required>
+          </div>
+
+          <div class="field">
+            <label>Gender <span class="req">*</span></label>
+            <select name="gender" required>
+              <option value="">Select</option>
+              <option>Male</option>
+              <option>Female</option>
+              <option>Other</option>
+              <option>Prefer not to say</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label>Mobile Number <span class="req">*</span></label>
+            <input type="tel" name="mobile" placeholder="+91 XXXXX XXXXX" pattern="[0-9+\s\-]{10,15}" required>
+          </div>
+
+          <div class="field">
+            <label>WhatsApp Number</label>
+            <input type="tel" name="whatsapp" placeholder="If different from mobile">
+          </div>
+
+          <div class="field full">
+            <label>Email Address</label>
+            <input type="email" name="email" placeholder="yourname@email.com">
+          </div>
+
+          <div class="field full">
+            <label>Residential Address <span class="req">*</span></label>
+            <input type="text" name="address" placeholder="Sector / Colony, Gurgaon" required>
+          </div>
+
+          <div class="field">
+            <label>Emergency Contact Name <span class="req">*</span></label>
+            <input type="text" name="emergency_name" placeholder="Parent / Spouse / Sibling" required>
+          </div>
+
+          <div class="field">
+            <label>Emergency Contact Number <span class="req">*</span></label>
+            <input type="tel" name="emergency_number" placeholder="+91 XXXXX XXXXX" required>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 3: PROGRAM & MEMBERSHIP -->
+    <div class="card">
+      <div class="card-header">
+        <div class="icon">🥊</div>
+        <h2>Program &amp; Membership</h2>
+      </div>
+      <div class="form-body">
+        <div class="form-grid">
+
+          <div class="field">
+            <label>Program Enrolling For <span class="req">*</span></label>
+            <select name="program" required>
+              <option value="">Select Program</option>
+              <option>MMA (Mixed Martial Arts)</option>
+              <option>Boxing</option>
+              <option>Wrestling / Grappling</option>
+              <option>Kickboxing / Muay Thai</option>
+              <option>Brazilian Jiu-Jitsu (BJJ)</option>
+              <option>General Fitness</option>
+              <option>Kids Program</option>
+              <option>Multiple Programs</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label>Membership Plan <span class="req">*</span></label>
+            <select name="membership_plan" required>
+              <option value="">Select Plan</option>
+              <option>Monthly</option>
+              <option>Quarterly (3 Months)</option>
+              <option>Half-Yearly (6 Months)</option>
+              <option>Annual (12 Months)</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label>Preferred Batch Timing</label>
+            <select name="batch_timing">
+              <option value="">No Preference</option>
+              <option>Morning (6 AM – 9 AM)</option>
+              <option>Afternoon (12 PM – 3 PM)</option>
+              <option>Evening (5 PM – 8 PM)</option>
+              <option>Night (8 PM – 10 PM)</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label>Training Experience Level</label>
+            <select name="experience_level">
+              <option value="">Select</option>
+              <option>Beginner — No prior training</option>
+              <option>Intermediate — Some experience</option>
+              <option>Advanced — Regular competitor</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label>How Did You Hear About Us?</label>
+            <select name="referral_source">
+              <option value="">Select</option>
+              <option>Instagram / Social Media</option>
+              <option>Friend / Family Referral</option>
+              <option>Google Search</option>
+              <option>Walk-in / Saw the Academy</option>
+              <option>Other</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label>Enrollment Date <span class="req">*</span></label>
+            <input type="date" name="enrollment_date" required>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 4: HEALTH DISCLOSURE -->
+    <div class="card">
+      <div class="card-header">
+        <div class="icon">🏥</div>
+        <h2>Health Disclosure</h2>
+      </div>
+      <div class="form-body">
+        <div class="form-grid">
+
+          <div class="field full">
+            <label>Do you have any medical conditions, injuries, or health concerns we should know about? <span class="req">*</span></label>
+            <select name="medical_conditions" id="medSelect" required>
+              <option value="">Select</option>
+              <option value="None — I am in good health">None — I am in good health</option>
+              <option value="Yes — Details mentioned below">Yes — I have a condition (details below)</option>
+            </select>
+          </div>
+
+          <div class="field full" id="medDetailsField" style="display:none;">
+            <label>Please describe your condition / injury</label>
+            <textarea name="medical_details" placeholder="e.g. Old knee injury (right), asthma, on medication for..."></textarea>
+          </div>
+
+          <div class="field full">
+            <label>Blood Group</label>
+            <select name="blood_group">
+              <option value="Not Known">Not Known</option>
+              <option>A+</option><option>A−</option>
+              <option>B+</option><option>B−</option>
+              <option>AB+</option><option>AB−</option>
+              <option>O+</option><option>O−</option>
+            </select>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- MINOR SECTION -->
+    <div class="card" style="overflow:visible;">
+      <div class="minor-toggle">
+        <input type="checkbox" id="minorCheck">
+        <label for="minorCheck">⚠️ &nbsp; This registration is for a member under 18 years of age (Minor)</label>
+      </div>
+      <div class="minor-fields" id="minorFields">
+        <div class="minor-banner">
+          Parent/Guardian details are mandatory for minors. The guardian accepts full responsibility on behalf of the minor by submitting this form.
+        </div>
+        <div class="form-grid">
+          <div class="field">
+            <label>Parent / Guardian Full Name</label>
+            <input type="text" name="guardian_name" placeholder="Full Name">
+          </div>
+          <div class="field">
+            <label>Relationship to Member</label>
+            <select name="guardian_relation">
+              <option value="">Select</option>
+              <option>Father</option>
+              <option>Mother</option>
+              <option>Legal Guardian</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="field full">
+            <label>Guardian Mobile Number</label>
+            <input type="tel" name="guardian_mobile" placeholder="+91 XXXXX XXXXX">
+          </div>
+        </div>
+        <br>
+      </div>
+    </div>
+
+    <!-- DECLARATION + SUBMIT -->
+    <div class="card">
+      <div class="card-header">
+        <div class="icon">✍️</div>
+        <h2>Declaration &amp; Submission</h2>
+      </div>
+      <div class="form-body">
+        <p style="font-size:13px;color:#4B5563;line-height:1.7;background:#F9FAFB;border-left:4px solid var(--red);padding:14px 16px;border-radius:0 8px 8px 0;">
+          By submitting this form, I confirm that all information provided is true and accurate to the best of my knowledge. I voluntarily agree to abide by all Terms &amp; Conditions of Rankrit Dojo Fight Club, including the liability waiver and assumption of risk for combat sports training.
+        </p>
+
+        <div class="field" style="margin-top:16px;">
+          <label>Your Full Name as Digital Signature <span class="req">*</span></label>
+          <input type="text" name="digital_signature" placeholder="Type your full name to sign" required>
+        </div>
+
+        <div class="field" style="margin-top:12px;">
+          <label>Today's Date <span class="req">*</span></label>
+          <input type="date" name="submission_date" id="submissionDate" required>
+        </div>
+      </div>
+
+      <div class="submit-section">
+        <button type="submit" class="submit-btn" id="submitBtn">
+          <span id="btnText">SUBMIT REGISTRATION</span>
+          <div class="spinner" id="spinner"></div>
+        </button>
+        <div class="error-msg" id="errorMsg">Something went wrong. Please try again or contact us on WhatsApp.</div>
+        <p class="privacy-note">
+          🔒 Your information is submitted securely and stored only for Academy records.<br>
+          By submitting, you agree to be contacted by Rankrit Dojo Fight Club regarding your membership.
+        </p>
+      </div>
+    </div>
+
+  </form><!-- end form -->
+
+  <!-- SUCCESS STATE -->
+  <div class="success-card" id="successCard">
+    <div class="success-icon">✅</div>
+    <h2>Registration Complete!</h2>
+    <p>Your membership registration for Rankrit Dojo Fight Club has been submitted successfully.</p>
+    <div class="welcome">
+      🥊 Welcome to the Dojo! Train hard. Stay disciplined. Earn your rank.
+    </div>
+  </div>
+
+</div><!-- end container -->
+
+<script>
+  // Auto-set today's date
+  document.getElementById('submissionDate').valueAsDate = new Date();
+
+  // Scroll detection → unlock checkbox
+  const tncBox = document.getElementById('tncBox');
+  const scrollHint = document.getElementById('scrollHint');
+  const agreeCheck = document.getElementById('agreeCheck');
+
+  tncBox.addEventListener('scroll', () => {
+    const scrolled = tncBox.scrollTop + tncBox.clientHeight;
+    const total = tncBox.scrollHeight;
+    if (scrolled >= total - 30) {
+      scrollHint.textContent = '✓ You have read the full Terms & Conditions';
+      scrollHint.classList.add('done');
+    }
+  });
+
+  // Medical condition toggle
+  document.getElementById('medSelect').addEventListener('change', function() {
+    const field = document.getElementById('medDetailsField');
+    field.style.display = this.value.includes('Yes') ? 'block' : 'none';
+  });
+
+  // Minor toggle
+  document.getElementById('minorCheck').addEventListener('change', function() {
+    const fields = document.getElementById('minorFields');
+    fields.classList.toggle('visible', this.checked);
+  });
+
+  // FORM SUBMIT
+  document.getElementById('regForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+
+    const agreeCheck = document.getElementById('agreeCheck');
+    if (!agreeCheck.checked) {
+      alert('Please scroll through and agree to the Terms & Conditions before submitting.');
+      return;
+    }
+
+    const btn = document.getElementById('submitBtn');
+    const btnText = document.getElementById('btnText');
+    const spinner = document.getElementById('spinner');
+    const errorMsg = document.getElementById('errorMsg');
+
+    btn.disabled = true;
+    btnText.textContent = 'SUBMITTING...';
+    spinner.style.display = 'block';
+    errorMsg.style.display = 'none';
+
+    const formData = new FormData(this);
+    const object = Object.fromEntries(formData);
+    const json = JSON.stringify(object);
+
+    try {
+      const res = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: json
+      });
+      const data = await res.json();
+
+      if (data.success) {
+        document.getElementById('regForm').style.display = 'none';
+        document.getElementById('successCard').classList.add('visible');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else {
+        throw new Error('Submission failed');
+      }
+    } catch (err) {
+      errorMsg.style.display = 'block';
+      btn.disabled = false;
+      btnText.textContent = 'SUBMIT REGISTRATION';
+      spinner.style.display = 'none';
+    }
+  });
+</script>
+</body>
+</html>
